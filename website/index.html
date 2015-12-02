@@ -7,10 +7,10 @@
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
         <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
-        <script src="moment.min.js"></script>         
+        <script src="../moment.min.js"></script>
 
-        <script src="daterangepicker.js"></script>
-        <link rel="stylesheet" type="text/css" href="daterangepicker.css" />
+        <script src="../daterangepicker.js"></script>
+        <link rel="stylesheet" type="text/css" href="../daterangepicker.css" />
 
         <script src="website.js"></script>
         <link rel="stylesheet" type="text/css" href="website.css" />
@@ -384,7 +384,40 @@
 
                     </div>
 
+                        <div id="ex6" name="ex6">
 
+                            <h3>Single Date Picker on Textarea</h3>
+
+                            <p>
+                                The Date Range Picker can be turned into a single date picker widget with only
+                                one calendar. In this example, dropdowns to select a month and year have also
+                                been enabled at the top of the calendar to quickly jump to different months.
+                            </p>
+
+                            <div class="row">
+                                <div class="col-md-9 col-xs-12">
+                                    <script src="https://gist.github.com/dangrossman/df41977acae070b3feb2.js"></script>
+                                </div>
+                                <div class="col-md-3 col-xs-12">
+                                    <h4>Demo:</h4>
+                                    <textarea class="pull-right" type="text" name="textarea">10/24/1984</textarea>
+                                </div>
+                            </div>
+
+                            <script type="text/javascript">
+                            $(function() {
+                                $('textarea[name="textarea"]').daterangepicker({
+                                    singleDatePicker: true,
+                                    showDropdowns: true
+                                },
+                                function(start, end, label) {
+                                    var years = moment().diff(start, 'years');
+                                    alert("You are " + years + " years old.");
+                                });
+                            });
+                            </script>
+
+                        </div>
 
                     <div id="config" name="config">
 
