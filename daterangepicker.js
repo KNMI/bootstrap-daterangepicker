@@ -52,6 +52,7 @@
         this.timePicker24Hour = false;
         this.timePickerIncrement = 1;
         this.timePickerSeconds = false;
+        this.noTimeEndRangeEndsOnEndOfDay = false;
         this.linkedCalendars = true;
         this.autoUpdateInput = true;
         this.ranges = {};
@@ -242,6 +243,9 @@
 
         if (typeof options.timePicker24Hour === 'boolean')
             this.timePicker24Hour = options.timePicker24Hour;
+
+        if (typeof options.noTimeEndRangeEndsOnEndOfDay === 'boolean')
+            this.noTimeEndRangeEndsOnEndOfDay = options.noTimeEndRangeEndsOnEndOfDay;
 
         if (typeof options.autoApply === 'boolean')
             this.autoApply = options.autoApply;
@@ -1443,6 +1447,18 @@
                 end = null;
 
             if (dateString.length === 2) {
+                if(this.timePicker && this.noTimeEndRangeEndsOnEndOfDay) {
+
+                    if ((dateString[1].length - this.locale.format.length) < -3) {
+                      if (this.timePickerIncrement) {
+                          dateString[1] = dateString[1]+" 23:" + (59-this.timePickerIncrement);
+                      } else {
+                          dateString[1] = dateString[1]+" 23:59";
+                      }
+
+                    }
+                }
+
                 start = moment(dateString[0], this.locale.format);
                 end = moment(dateString[1], this.locale.format);
             }
