@@ -128,7 +128,7 @@ $(document).ready(function() {
       
     }
 
-    if ($(window).width() > 980) {
+    if ($(window).width() > 980 && (typeof $('#sidebar').affix !== 'undefined')) {
         $('#sidebar').affix({
           offset: {
             top: 300,
@@ -138,5 +138,7 @@ $(document).ready(function() {
           }
         });
     }
-    $('body').scrollspy({ target: '#nav-spy', offset: 20 });
+    if (typeof $('#sidebar').scrollspy !== 'undefined') {
+        $('body').scrollspy({ target: '#nav-spy', offset: 20 });
+    }
 });

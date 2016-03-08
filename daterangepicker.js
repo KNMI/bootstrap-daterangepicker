@@ -53,6 +53,7 @@
         this.timePicker24Hour = false;
         this.timePickerIncrement = 1;
         this.timePickerSeconds = false;
+        this.noTimeEndRangeEndsOnEndOfDay = false;
         this.linkedCalendars = true;
         this.autoUpdateInput = true;
         this.alwaysShowCalendars = false;
@@ -248,6 +249,9 @@
         if (typeof options.timePicker24Hour === 'boolean')
             this.timePicker24Hour = options.timePicker24Hour;
 
+        if (typeof options.noTimeEndRangeEndsOnEndOfDay === 'boolean')
+            this.noTimeEndRangeEndsOnEndOfDay = options.noTimeEndRangeEndsOnEndOfDay;
+
         if (typeof options.autoApply === 'boolean')
             this.autoApply = options.autoApply;
 
@@ -420,7 +424,7 @@
             .on('mouseenter.daterangepicker', 'li', $.proxy(this.hoverRange, this))
             .on('mouseleave.daterangepicker', 'li', $.proxy(this.updateFormInputs, this));
 
-        if (this.element.is('input')) {
+        if (this.element.is('input') || this.element.is('textarea')) {
             this.element.on({
                 'click.daterangepicker': $.proxy(this.show, this),
                 'focus.daterangepicker': $.proxy(this.show, this),
@@ -428,17 +432,21 @@
                 'keydown.daterangepicker': $.proxy(this.keydown, this)
             });
         } else {
-            this.element.on('click.daterangepicker', $.proxy(this.toggle, this));
+            this.element.on({
+                'click.daterangepicker': $.proxy(this.show, this),
+                'focus.daterangepicker': $.proxy(this.show, this),
+                'keydown.daterangepicker': $.proxy(this.keydown, this)
+            });
         }
 
         //
         // if attached to a text input, set the initial value
         //
 
-        if (this.element.is('input') && !this.singleDatePicker && this.autoUpdateInput) {
+        if ((this.element.is('input') || this.element.is('textarea')) && !this.singleDatePicker && this.autoUpdateInput) {
             this.element.val(this.startDate.format(this.locale.format) + this.locale.separator + this.endDate.format(this.locale.format));
             this.element.trigger('change');
-        } else if (this.element.is('input') && this.autoUpdateInput) {
+        } else if ((this.element.is('input') || this.element.is('textarea')) && this.autoUpdateInput) {
             this.element.val(this.startDate.format(this.locale.format));
             this.element.trigger('change');
         }
@@ -1477,7 +1485,7 @@
         },
 
         elementChanged: function() {
-            if (!this.element.is('input')) return;
+            if (!(this.element.is('input') || this.element.is('textarea'))) return;
             if (!this.element.val().length) return;
             if (this.element.val().length < this.locale.format.length) return;
 
@@ -1486,6 +1494,18 @@
                 end = null;
 
             if (dateString.length === 2) {
+                if(this.timePicker && this.noTimeEndRangeEndsOnEndOfDay) {
+
+                    if ((dateString[1].length - this.locale.format.length) < -3) {
+                      if (this.timePickerIncrement) {
+                          dateString[1] = dateString[1]+" 23:" + (59-this.timePickerIncrement);
+                      } else {
+                          dateString[1] = dateString[1]+" 23:59";
+                      }
+
+                    }
+                }
+
                 start = moment(dateString[0], this.locale.format);
                 end = moment(dateString[1], this.locale.format);
             }
