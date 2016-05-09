@@ -58,6 +58,8 @@
         this.autoUpdateInput = true;
         this.alwaysShowCalendars = false;
         this.ranges = {};
+        this.maxDefinedYear = 0;
+        this.minDefinedYear = 0;
 
         this.opens = 'right';
         if (this.element.hasClass('pull-right'))
@@ -239,6 +241,12 @@
 
         if (typeof options.timePicker === 'boolean')
             this.timePicker = options.timePicker;
+
+        if (typeof options.maxDefinedYear === 'number')
+            this.maxDefinedYear = options.maxDefinedYear;
+
+        if (typeof options.minDefinedYear === 'number')
+            this.minDefinedYear = options.minDefinedYear;
 
         if (typeof options.timePickerSeconds === 'boolean')
             this.timePickerSeconds = options.timePickerSeconds;
@@ -643,10 +651,8 @@
             if (dayOfWeek == this.locale.firstDay)
                 startDay = daysInLastMonth - 6;
 
-            const maxDefinedYear = 9999;
-            const minDefinedYear = 1899;
             var curDate = moment([lastYear, lastMonth, startDay, 12, minute, second]);
-            if (lastYear === minDefinedYear || lastYear === maxDefinedYear) {
+            if (lastYear === this.minDefinedYear || lastYear === this.maxDefinedYear) {
                 curDate = moment().substract(26, 'day');
             }
 
