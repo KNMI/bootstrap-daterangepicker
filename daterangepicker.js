@@ -643,7 +643,12 @@
             if (dayOfWeek == this.locale.firstDay)
                 startDay = daysInLastMonth - 6;
 
+            const maxDefinedYear = 9999;
+            const minDefinedYear = 1899;
             var curDate = moment([lastYear, lastMonth, startDay, 12, minute, second]);
+            if (lastYear === minDefinedYear || lastYear === maxDefinedYear) {
+                curDate = moment().substract(26, 'day');
+            }
 
             var col, row;
             for (var i = 0, col = 0, row = 0; i < 42; i++, col++, curDate = moment(curDate).add(24, 'hour')) {
