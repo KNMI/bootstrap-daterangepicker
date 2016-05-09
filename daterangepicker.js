@@ -653,7 +653,7 @@
 
             var curDate = moment([lastYear, lastMonth, startDay, 12, minute, second]);
             if (lastYear === this.minDefinedYear || lastYear === this.maxDefinedYear) {
-                curDate = moment().substract(26, 'day');
+                curDate = moment().subtract(26, 'day');
             }
 
             var col, row;
